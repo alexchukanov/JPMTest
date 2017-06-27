@@ -43,7 +43,7 @@ namespace JPMtest
         public int Adjustment { get; set; }
         public MessageType SaleMessageType { get; set; }
 
-        int cost = 0;
+        
         public int Cost
         {
             get { return Price * Amount; }
@@ -60,11 +60,11 @@ namespace JPMtest
                     switch (Action)
                     {
                         case ActionType.Add:
-                            totalPrice += Adjustment;
+                            totalPrice = Cost + Adjustment;
                             //WriteLog();
                             break;
                         case ActionType.Subtruct:
-                            totalPrice -= Adjustment;
+                            totalPrice = Cost - Adjustment;
                             if (totalPrice < 0)
                             {
                                 //WriteLog();
@@ -72,7 +72,7 @@ namespace JPMtest
                             }
                             break;
                         case ActionType.Multiply:
-                            totalPrice *= Adjustment;
+                            totalPrice = Cost + Adjustment;
                             //WriteLog();
                             break;
                         default:                            

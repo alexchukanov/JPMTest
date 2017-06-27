@@ -64,7 +64,7 @@ namespace JPMtest
 
             string[] words = line.Split(',');
 
-            if(words.Count() == 5)
+            if(words.Count() == 6)
             {
                 sale = new Sale();
 
