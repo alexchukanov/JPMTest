@@ -8,6 +8,8 @@ namespace JPMtest
 {
     class Program
     {
+        static List<Sale> storedSales = new List<Sale>();
+
         static void Main(string[] args)
         {
             Console.WriteLine("Message format: <1>,<2>,<3>,<4>,<5>");
@@ -18,8 +20,13 @@ namespace JPMtest
             Console.WriteLine("<5> - Amendment, +/- pence: ");
             Console.WriteLine();
 
+            //test
+            // 1,1,10,0,0
+            // 1,1,15,0,0
+            // 2,1,10,250,0
 
-           Console.WriteLine("Enter E to exit");
+
+            Console.WriteLine("Enter E to exit");
 
             string line;
             bool result = true;
@@ -36,7 +43,7 @@ namespace JPMtest
                         storedSales.Add(sale);
                         break;
                     case MessageType.Mes2:
-                        //AddSaleDetails(sale); 
+                        AddSaleDetails(sale); 
                         break;
                     case MessageType.Mes3:
                         //UpdateSaleDetails(sale); 
@@ -56,7 +63,7 @@ namespace JPMtest
         {
             Sale sale = null;
 
-            string[] words = line.Split(',' , ' ');
+            string[] words = line.Split(',');
 
             if(words.Count() == 5)
             {
@@ -68,7 +75,7 @@ namespace JPMtest
 
                 int product;
                 int.TryParse(words[1], out product);
-                sale.Product = (ProductType)mt;
+                sale.Product = (ProductType)product;
 
                 int price;
                 int.TryParse(words[2], out price);
@@ -93,7 +100,25 @@ namespace JPMtest
 
         static bool AddSaleDetails(Sale sale)
         {
-            return false;
+            bool result = true;
+
+            var detailsList = storedSales.Where(s => s.SaleMessageType == MessageType.Mes1 &&
+                                            s.Product == sale.Product &&
+                                            s.Price == sale.Price);
+
+            if (detailsList.Count() > 0)
+            {
+                foreach (var saleDetail in detailsList)
+                {
+                    saleDetail.Amount = sale.Amount;
+                }
+            }
+            else
+            {
+                result = false;
+            }
+
+            return result;
         }
 
         static bool UpdateSaleDetails(Sale sale)

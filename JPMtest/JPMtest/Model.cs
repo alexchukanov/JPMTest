@@ -30,7 +30,13 @@ namespace JPMtest
         public int Price
         {
             get { return price; }
-            set { if (value < 0) price = 0; }
+            set
+            {
+                if (value < 0)
+                    price = 0;
+                else
+                    price = value;
+            }
         }
 
         public ActionType Action { get; set; }
