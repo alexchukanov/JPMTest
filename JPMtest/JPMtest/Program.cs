@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace JPMtest
 {
@@ -11,51 +13,54 @@ namespace JPMtest
         static List<Sale> storedSales = new List<Sale>();
 
         static void Main(string[] args)
-        {
-            Console.WriteLine("Message format: <1>,<2>,<3>,<4>,<5>");
+        {   
+            string path = @"TestData.txt";
+            string line;
+            int messagesCounter = 0;
+
+            Console.WriteLine("Message format: <1>,<2>,<3>,<4>,<5>,<6>");
             Console.WriteLine("<1> - Message Type: 1,2,3");
             Console.WriteLine("<2> - Product: 1-apple,2-orange,3-pear");
             Console.WriteLine("<3> - Cost, pence: ");
             Console.WriteLine("<4> - Amount, items: ");
-            Console.WriteLine("<6> - Amendment, +/-/* pence: ");
-            Console.WriteLine();
+            Console.WriteLine("<5> - Action, +/-/* : ");
+            Console.WriteLine("<6> - Amendment, pence: ");
+            Console.WriteLine("Loading messages from file: /Debug/TestData.txt");
 
-            //test
-            // 1,1,10,0,0,0
-            // 1,1,15,0,0,0
-            // 2,1,10,250,0,0  mes2
-            // 3,1,10,0,+,10   mes3
-
-
-            Console.WriteLine("Enter E to exit");
-
-            string line;
-            bool result = true;
-                       
-            while ((line = Console.ReadLine()) != "E")
-            {
-                Sale sale = ParseMessage(line);                
-
-                switch (sale.SaleMessageType)
+            using (var streamReader = new StreamReader(path, Encoding.UTF8))
+            {               
+                
+                while ((line = streamReader.ReadLine()) != null)
                 {
-                    case MessageType.Mes1:
-                        storedSales.Add(sale);
-                        break;
-                    case MessageType.Mes2:
-                        AddSaleDetails(sale); 
-                        break;
-                    case MessageType.Mes3:
-                        //UpdateSaleDetails(sale); 
-                        break;
-                    default:
-                        result = false;
-                        break;
+                    Console.WriteLine(String.Format("{0}: {1}", messagesCounter, line));
+
+                    Sale sale = ParseMessage(line);
+
+                    switch (sale.SaleMessageType)
+                    {
+                        case MessageType.Mes1:
+                            storedSales.Add(sale);
+                            break;
+                        case MessageType.Mes2:
+                            AddSaleDetails(sale);
+                            break;
+                        case MessageType.Mes3:
+                            UpdateSaleDetails(sale); 
+                            break;
+                        default:
+                            
+                            break;
+                    }
+
+                    messagesCounter++;
                 }
 
-                Console.WriteLine(result);
-                Console.WriteLine("bla bla - enter E to exit");
+                Console.WriteLine(String.Format("Total messages = {0}", messagesCounter));
             }
 
+            Console.WriteLine("Press a key to finish");
+            Console.ReadKey();
+            
         }
 
         static Sale ParseMessage(string line)
@@ -163,5 +168,34 @@ namespace JPMtest
             return result;
         }
 
+        static string ReadFilePath()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            string path = System.Environment.CurrentDirectory;
+            string fileName = "TestData.txt";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                path = dlg.FileName;
+                fileName = dlg.SafeFileName;
+            }
+            else
+            {
+                throw (new Exception("Select file TestData.txt"));
+            }
+
+            return path;
+        }
+
+        static void PrintSale(Sale sale)
+        {
+
+        }
+
     }
+
+    
 }

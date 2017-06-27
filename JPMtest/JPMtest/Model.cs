@@ -46,8 +46,7 @@ namespace JPMtest
         
         public int Cost
         {
-            get { return Price * Amount; }
-           
+            get { return Price * Amount; }           
         }
 
         int totalPrice = 0;
@@ -83,86 +82,7 @@ namespace JPMtest
 
                 return totalPrice;
             }
-        }
-
-
-    /*
-        int CalcAdjustment()
-        {
-            bool result = true;
-
-            if (SaleMessageType == MessageType.Mes2)
-            {
-                switch (Action)
-                {
-                    case ActionType.Add:
-                        TotalPrice += Adjustment;
-                        //WriteLog();
-                        break;
-                    case ActionType.Subtruct:
-                        TotalPrice -= saleAdj.Adjustment;
-                        //if (Cost < 0)  WriteLog();
-                        break;
-                    case ActionType.Multiply:
-                        TotalPrice *= saleAdj.Adjustment;
-                        //WriteLog();
-                        break;
-                    default:
-                        result = false;
-                        //WriteLog();
-                        break;
-                }
-
-            }
-            else
-            {
-                //WriteLog();
-                result = false;
-            }
-
-
-            return result;
-        }
-        */
-
-
-
-        public bool SaleAdjustment(Sale saleAdj)
-        {
-            bool result = true;
-
-            if (saleAdj.SaleMessageType == MessageType.Mes3)
-            {
-                switch(saleAdj.Action)
-                {
-                    case ActionType.Add:
-                        Price += saleAdj.Adjustment;
-                        //WriteLog();
-                        break;
-                    case ActionType.Subtruct:
-                        Price -= saleAdj.Adjustment;
-                        //if (Cost < 0)  WriteLog();
-                            break;
-                    case ActionType.Multiply:
-                        Price *= saleAdj.Adjustment;
-                        //WriteLog();
-                        break;
-                    default:
-                        result = false;
-                        //WriteLog();
-                        break;
-                }
-                
-            }
-            else
-            {
-                //WriteLog();
-                result = false;
-            }
-
-
-            return result;
-        }
+        }        
     }
 
     enum ActionType
