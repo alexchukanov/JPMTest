@@ -17,13 +17,14 @@ namespace JPMtest
             Console.WriteLine("<2> - Product: 1-apple,2-orange,3-pear");
             Console.WriteLine("<3> - Cost, pence: ");
             Console.WriteLine("<4> - Amount, items: ");
-            Console.WriteLine("<5> - Amendment, +/- pence: ");
+            Console.WriteLine("<6> - Amendment, +/-/* pence: ");
             Console.WriteLine();
 
             //test
-            // 1,1,10,0,0
-            // 1,1,15,0,0
-            // 2,1,10,250,0
+            // 1,1,10,0,0,0
+            // 1,1,15,0,0,0
+            // 2,1,10,250,0,0  mes2
+            // 3,1,10,0,+,10   mes3
 
 
             Console.WriteLine("Enter E to exit");
@@ -83,8 +84,26 @@ namespace JPMtest
                 int.TryParse(words[3], out amount);
                 sale.Amount = amount;
 
+                string action = words[4].Trim();
+                switch(action)
+                {
+                    case "-":
+                        sale.Action = ActionType.Subtruct;
+                        break;
+                    case "+":
+                        sale.Action = ActionType.Add;
+                        break;
+                    case "*":
+                        sale.Action = ActionType.Multiply;
+                        break;
+                    default:
+                        sale.Action = ActionType.None;
+                        //log
+                        break;
+                }
+                                
                 int adjustment;
-                int.TryParse(words[4], out adjustment);
+                int.TryParse(words[5], out adjustment);
                 sale.Adjustment = adjustment;
                 
             }
@@ -109,6 +128,7 @@ namespace JPMtest
                 foreach (var saleDetail in detailsList)
                 {
                     saleDetail.Amount = sale.Amount;
+                    saleDetail.SaleMessageType = MessageType.Mes2;
                 }
             }
             else
@@ -121,7 +141,26 @@ namespace JPMtest
 
         static bool UpdateSaleDetails(Sale sale)
         {
-            return false;
+            bool result = true;
+
+            var adjList = storedSales.Where(s => s.SaleMessageType == MessageType.Mes2 &&
+                                            s.Product == sale.Product 
+                                            );
+
+            if (adjList.Count() > 0)
+            {
+                foreach (var saleDetail in adjList)
+                {
+                    saleDetail.Action = sale.Action;
+                    saleDetail.Adjustment = sale.Adjustment;
+                }
+            }
+            else
+            {
+                result = false;
+            }
+
+            return result;
         }
 
     }

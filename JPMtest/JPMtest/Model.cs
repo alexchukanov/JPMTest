@@ -43,6 +43,90 @@ namespace JPMtest
         public int Adjustment { get; set; }
         public MessageType SaleMessageType { get; set; }
 
+        int cost = 0;
+        public int Cost
+        {
+            get { return Price * Amount; }
+           
+        }
+
+        int totalPrice = 0;
+        public int TotalPrice
+        {
+            get
+            {
+                if (SaleMessageType == MessageType.Mes2)
+                {
+                    switch (Action)
+                    {
+                        case ActionType.Add:
+                            totalPrice += Adjustment;
+                            //WriteLog();
+                            break;
+                        case ActionType.Subtruct:
+                            totalPrice -= Adjustment;
+                            if (totalPrice < 0)
+                            {
+                                //WriteLog();
+                                totalPrice = 0;
+                            }
+                            break;
+                        case ActionType.Multiply:
+                            totalPrice *= Adjustment;
+                            //WriteLog();
+                            break;
+                        default:                            
+                            //WriteLog();
+                            break;
+                    }
+                }
+
+                return totalPrice;
+            }
+        }
+
+
+    /*
+        int CalcAdjustment()
+        {
+            bool result = true;
+
+            if (SaleMessageType == MessageType.Mes2)
+            {
+                switch (Action)
+                {
+                    case ActionType.Add:
+                        TotalPrice += Adjustment;
+                        //WriteLog();
+                        break;
+                    case ActionType.Subtruct:
+                        TotalPrice -= saleAdj.Adjustment;
+                        //if (Cost < 0)  WriteLog();
+                        break;
+                    case ActionType.Multiply:
+                        TotalPrice *= saleAdj.Adjustment;
+                        //WriteLog();
+                        break;
+                    default:
+                        result = false;
+                        //WriteLog();
+                        break;
+                }
+
+            }
+            else
+            {
+                //WriteLog();
+                result = false;
+            }
+
+
+            return result;
+        }
+        */
+
+
+
         public bool SaleAdjustment(Sale saleAdj)
         {
             bool result = true;
