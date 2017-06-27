@@ -26,7 +26,7 @@ namespace JPMtest
             Console.WriteLine("<5> - Action, +/-/* : ");
             Console.WriteLine("<6> - Amendment, pence: ");
             Console.WriteLine("Loading messages from file: /Debug/TestData.txt");
-
+                       
             using (var streamReader = new StreamReader(path, Encoding.UTF8))
             {               
                 
@@ -36,16 +36,22 @@ namespace JPMtest
 
                     Sale sale = ParseMessage(line);
 
+                    PrintSale(sale);                   
+
                     switch (sale.SaleMessageType)
                     {
                         case MessageType.Mes1:
                             storedSales.Add(sale);
+                            Console.WriteLine("Mes1 processed:");
+                            PrintSale(sale);
                             break;
                         case MessageType.Mes2:
                             AddSaleDetails(sale);
+                            Console.WriteLine("Mes2 processed:");
                             break;
                         case MessageType.Mes3:
-                            UpdateSaleDetails(sale); 
+                            UpdateSaleDetails(sale);
+                            Console.WriteLine("Mes3 processed:");
                             break;
                         default:
                             
@@ -140,7 +146,9 @@ namespace JPMtest
             {
                 result = false;
             }
-
+                       
+            Console.WriteLine(String.Format("Mes2 details added for {0} sales", detailsList.Count()));
+           
             return result;
         }
 
@@ -165,34 +173,16 @@ namespace JPMtest
                 result = false;
             }
 
+            Console.WriteLine(String.Format("Mes3 adjusment applied for {0} sales", adjList.Count()));
+
             return result;
         }
-
-        static string ReadFilePath()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.DefaultExt = ".txt";
-            dlg.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-
-            string path = System.Environment.CurrentDirectory;
-            string fileName = "TestData.txt";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                path = dlg.FileName;
-                fileName = dlg.SafeFileName;
-            }
-            else
-            {
-                throw (new Exception("Select file TestData.txt"));
-            }
-
-            return path;
-        }
+        
 
         static void PrintSale(Sale sale)
         {
-
+            Console.WriteLine(String.Format("Message Type={0}; Product={1}; Price={2}p; Amount={3}; Action={4}{5}; Cost={6}, Total={7}",
+                   sale.SaleMessageType, sale.Product, sale.Price, sale.Amount, sale.Action, sale.Adjustment, sale.Cost, sale.TotalPrice));
         }
 
     }
