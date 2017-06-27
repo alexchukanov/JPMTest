@@ -26,12 +26,18 @@ namespace JPMtest
             Console.WriteLine("<5> - Action, +/-/* : ");
             Console.WriteLine("<6> - Amendment, pence: ");
             Console.WriteLine("Loading messages from file: /Debug/TestData.txt");
-                       
+            
             using (var streamReader = new StreamReader(path, Encoding.UTF8))
             {               
                 
                 while ((line = streamReader.ReadLine()) != null)
                 {
+                    if(line == "")
+                    {
+                        continue;
+                    }
+
+                    Console.WriteLine("");
                     Console.WriteLine(String.Format("Mes N{0}: {1}", messagesCounter, line));
 
                     Sale sale = ParseMessage(line);
@@ -58,8 +64,24 @@ namespace JPMtest
                     }
 
                     messagesCounter++;
+
+                    if((messagesCounter % 5) == 0)
+                    {
+                        PrintReport10();
+                    }
+
+                    if ((messagesCounter % 10) == 0)
+                    {
+                        PrintReport50();
+
+                        Console.WriteLine("Press a key to continue");
+                        Console.ReadKey();
+                    }
                 }
 
+                PrintReport10();
+                PrintReport50();
+                Console.WriteLine("");
                 Console.WriteLine(String.Format("Total processed messages = {0}", messagesCounter));
             }
 
@@ -141,6 +163,7 @@ namespace JPMtest
                 {
                     saleDetail.Amount = sale.Amount;
                     saleDetail.SaleMessageType = MessageType.Mes2;
+                    PrintSale(saleDetail);
                 }
             }
             else
@@ -167,6 +190,8 @@ namespace JPMtest
                 {
                     saleDetail.Action = sale.Action;
                     saleDetail.Adjustment = sale.Adjustment;
+
+                    PrintSale(saleDetail);
                 }
             }
             else
@@ -186,6 +211,39 @@ namespace JPMtest
                    sale.SaleMessageType, sale.Product, sale.Price, sale.Amount, sale.Action, sale.Adjustment, sale.Cost, sale.TotalPrice));
         }
 
+        static void PrintReport10()
+        {            
+            Console.WriteLine("");
+            Console.WriteLine("Report for basic sales:");
+            Console.WriteLine("======================");
+
+            var saleList = storedSales.Where(s => s.SaleMessageType == MessageType.Mes2 && s.Adjustment == 0);
+
+            foreach (Sale sale in saleList)
+            {               
+                PrintSale(sale);
+            }
+
+            Console.WriteLine("End of Report");            
+            Console.WriteLine("");
+        }
+
+        static void PrintReport50()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Report for adjasted sales:");
+            Console.WriteLine("=========================");
+
+            var saleList = storedSales.Where(s => s.SaleMessageType == MessageType.Mes2 && s.Adjustment != 0);
+
+            foreach (Sale sale in saleList)
+            {
+                PrintSale(sale);
+            }
+
+            Console.WriteLine("End of Report");
+            Console.WriteLine("");
+        }
     }
 
     

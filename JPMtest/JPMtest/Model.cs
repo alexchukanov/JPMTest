@@ -17,7 +17,8 @@ namespace JPMtest
         Orange,
         Melon,
         Pie,
-        Bananas
+        Bananas,
+        Pineapple
     }
 
     class Sale
@@ -71,7 +72,7 @@ namespace JPMtest
                             }
                             break;
                         case ActionType.Multiply:
-                            totalPrice = Cost + Adjustment;
+                            totalPrice = Cost * Adjustment;
                             //WriteLog();
                             break;
                         default:                            
