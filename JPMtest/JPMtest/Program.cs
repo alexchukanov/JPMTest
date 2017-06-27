@@ -32,7 +32,7 @@ namespace JPMtest
                 
                 while ((line = streamReader.ReadLine()) != null)
                 {
-                    Console.WriteLine(String.Format("{0}: {1}", messagesCounter, line));
+                    Console.WriteLine(String.Format("Mes N{0}: {1}", messagesCounter, line));
 
                     Sale sale = ParseMessage(line);
 
@@ -42,16 +42,15 @@ namespace JPMtest
                     {
                         case MessageType.Mes1:
                             storedSales.Add(sale);
-                            Console.WriteLine("Mes1 processed:");
-                            PrintSale(sale);
+                            Console.WriteLine("Mes1 processed.");                           
                             break;
                         case MessageType.Mes2:
                             AddSaleDetails(sale);
-                            Console.WriteLine("Mes2 processed:");
+                            Console.WriteLine("Mes2 processed.");
                             break;
                         case MessageType.Mes3:
                             UpdateSaleDetails(sale);
-                            Console.WriteLine("Mes3 processed:");
+                            Console.WriteLine("Mes3 processed.");
                             break;
                         default:
                             
@@ -61,7 +60,7 @@ namespace JPMtest
                     messagesCounter++;
                 }
 
-                Console.WriteLine(String.Format("Total messages = {0}", messagesCounter));
+                Console.WriteLine(String.Format("Total processed messages = {0}", messagesCounter));
             }
 
             Console.WriteLine("Press a key to finish");
@@ -134,7 +133,9 @@ namespace JPMtest
                                             s.Product == sale.Product &&
                                             s.Price == sale.Price);
 
-            if (detailsList.Count() > 0)
+            int count = detailsList.Count();
+
+            if (count > 0)
             {
                 foreach (var saleDetail in detailsList)
                 {
@@ -147,7 +148,7 @@ namespace JPMtest
                 result = false;
             }
                        
-            Console.WriteLine(String.Format("Mes2 details added for {0} sales", detailsList.Count()));
+            Console.WriteLine(String.Format("Mes2 details added for {0} sales", count));
            
             return result;
         }
