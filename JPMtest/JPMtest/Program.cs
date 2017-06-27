@@ -30,9 +30,7 @@ namespace JPMtest
 
             string line;
             bool result = true;
-
-            List<Sale> storedSales = new List<Sale>();
-
+                       
             while ((line = Console.ReadLine()) != "E")
             {
                 Sale sale = ParseMessage(line);                
